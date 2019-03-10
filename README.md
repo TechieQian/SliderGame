@@ -1,2 +1,0 @@
-# SliderGame
-Created with CodeSandbox
