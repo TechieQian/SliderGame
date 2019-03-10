@@ -11,23 +11,23 @@ class Board extends React.Component {
   }
 
   componentDidMount() {
-    this.shuffle(50);
+    this.shuffle();
   }
 
-  shuffle = n => {
-    console.log("shuffle", n);
-    if (n <= 0) return;
-    let max = this.state.boardValues.length;
-    let randomX = Math.floor(Math.random() * max);
-    let randomY = Math.floor(Math.random() * max);
-    this.move([randomX, randomY], moved => {
-      this.shuffle(n--);
-    });
+  shuffle = () => {
+    let n = 100;
+    while (n) {
+      let max = this.state.boardValues.length;
+      let randomX = Math.floor(Math.random() * max);
+      let randomY = Math.floor(Math.random() * max);
+      this.move([randomX, randomY]);
+      n--;
+    }
   };
 
   move = (coord, cb) => {
     const [x, y] = coord;
-    if (this.state.boardValues[x][y] === "X") cb && cb(false);
+    if (this.state.boardValues[x][y] === "X") return;
     let xcoord = this.checkAdjacent(x, y);
     if (xcoord) {
       let [xx, xy] = xcoord;
@@ -35,9 +35,8 @@ class Board extends React.Component {
       let temp = newBoard[x][y];
       newBoard[x][y] = newBoard[xx][xy];
       newBoard[xx][xy] = temp;
-      this.setState({ boardValues: newBoard }, () => {
-        console.log("calling cb");
-        cb && cb(true);
+      this.setState({
+        boardValues: newBoard
       });
     }
   };
